@@ -15,16 +15,16 @@
  */
 
 /**
- * Sample showing how to use BlackBerry Native APIs for channels to 
+ * Sample showing how to use BlackBerry Native APIs for channels to
  * allow different threads to handle events from different services.
- * 
- * Note that the main purpose of this sample is to show channels working 
- * with services.  Please see the Accelerometer sample and the Geolocation 
+ *
+ * Note that the main purpose of this sample is to show channels working
+ * with services.  Please see the Accelerometer sample and the Geolocation
  * sample for a better understanding of how to use the accelerometer and
- * geolocation services. 
+ * geolocation services.
  *
  */
- 
+
 #include <bps/bps.h>
 #include <bps/dialog.h>
 #include <bps/geolocation.h>
@@ -58,7 +58,7 @@ static const int STOP_REQUEST = 1;
 static int accel_chid = -1;
 
 /**
- * A place to store the requested event domain 
+ * A place to store the requested event domain
  */
 static int local_event_domain;
 
@@ -127,7 +127,7 @@ handle_geolocation_response(bps_event_t *event)
     double latitude = geolocation_event_get_latitude(event);
     double longitude = geolocation_event_get_longitude(event);
     double accuracy = geolocation_event_get_accuracy(event);
-    
+
     snprintf(msg, MSG_SIZE,
              "Geolocation report #%d\n"
              "\tlatitude: % 13.8f degrees\n"
@@ -141,9 +141,9 @@ handle_geolocation_response(bps_event_t *event)
 }
 
 /**
- * Thread that handles accelerometer events and 
- * sends relevant information to a dialog. 
- * 
+ * Thread that handles accelerometer events and
+ * sends relevant information to a dialog.
+ *
  * @param p Unused.
  */
 static void *
@@ -155,10 +155,10 @@ accel_main (void *p) {
     bps_initialize();
 
     /*
-     * Each thread that calls bps_initialize() will have its 
+     * Each thread that calls bps_initialize() will have its
      * own unique channel ID.  Protect it inside a mutex and
      * condition variable to avoid race condition where main
-     * thread tries to use it before we assign it. 
+     * thread tries to use it before we assign it.
      */
     pthread_mutex_lock(&chidMutex);
     accel_chid = bps_channel_get_active();
@@ -221,7 +221,7 @@ main(int argc, char *argv[])
     bps_initialize();
 
     /*
-     * Initialize the screen so that the window group Id is properly set, 
+     * Initialize the screen so that the window group Id is properly set,
      * to allow the dialogs to be displayed.
      */
     if (setup_screen() != EXIT_SUCCESS) {
@@ -234,7 +234,7 @@ main(int argc, char *argv[])
      * events from the various BlackBerry Tablet OS platform services. The
      * Navigator service manages and delivers application life cycle and
      * visibility events.
-     * 
+     *
      * We register a custom event domain so that we can communicate with the
      * the accelerometer thread.  We will need to tell it to quit once we get
      * the NAVIGATOR_EXIT.
@@ -322,7 +322,7 @@ main(int argc, char *argv[])
     geolocation_stop_events(0);
 
     /*
-     * Avoid a possible race condition where accel_chid has not yet 
+     * Avoid a possible race condition where accel_chid has not yet
      * been assigned a valid channel ID.
      */
     pthread_mutex_lock(&chidMutex);
